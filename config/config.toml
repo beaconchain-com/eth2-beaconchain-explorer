@@ -1,0 +1,63 @@
+# ================================================
+# فایل تنظیمات اصلی اکسپلورر بیکن‌چین
+# این فایل باید در مسیر config/config.toml قرار گیرد
+# ================================================
+
+# --- تنظیمات پایگاه داده ---
+[Database]
+  Host = "localhost"          # آدرس سرور دیتابیس (در docker: "postgres")
+  Port = 5432
+  User = "postgres"
+  Password = "your_password"  # رمز عبور دیتابیس خود را وارد کنید
+  Name = "beaconchain"        # نام دیتابیس
+
+# --- نود لایه اجماع (Consensus Layer) ---
+[BeaconNode]
+  # آدرس نود Lighthouse، Prysm یا سایر کلاینت‌های لایه اجماع
+  Host = "http://localhost:3500"
+
+# --- نود لایه اجرا (Execution Layer) ---
+[ExecutionNode]
+  # آدرس نود Geth، Nethermind یا سایر کلاینت‌های لایه اجرا
+  Host = "http://localhost:8545"
+
+[Eth1]
+  Host = "http://localhost:8545"
+
+# --- تنظیمات رابط کاربری ---
+[Frontend]
+  SiteDomain = "localhost:8080"
+  Secure = false              # برای localhost false باشد، در تولید true
+  Debug = true                # در تولید false شود
+
+# --- کش (Redis) ---
+[Redis]
+  Host = "localhost"          # در docker از "redis" استفاده کنید
+  Port = 6379
+  Password = ""
+
+# ================================================
+# 🌟 اسکنر خودکار پرداخت (ویژگی اصلی)
+# ================================================
+[PaymentScanner]
+  Enabled = true               # فعال‌سازی اسکنر
+  ScanIntervalSeconds = 600    # هر 10 دقیقه یک بار اسکن کند
+
+  # کلیدهای API (برای خواندن تراکنش‌ها از بلاک‌چین) - در صورت عدم وجود، اسکنر کار نمی‌کند
+  EtherscanAPIKey = "YOUR_ETHERSCAN_API_KEY"     # از etherscan.io دریافت کنید
+  BscscanAPIKey = "YOUR_BSCSCAN_API_KEY"         # از bscscan.com
+  SolanaRPCURL = "https://api.mainnet-beta.solana.com"  # می‌تواند عمومی باشد
+  BlockstreamAPIKey = ""                          # اختیاری برای بیت‌کوین
+
+  # آدرس کیف پول‌هایی که اسکنر باید آن‌ها را رصد کند
+  [PaymentScanner.Wallets]
+    ETH = "0x4E94F10F0a34a0DF229e68d5902644046258D678"
+    BNB = "0x4E94F10F0a34a0DF229e68d5902644046258D678"
+    SOL = "D5WGQzdd6NrAWKfcSCL29DT238SVPkobKrm6VTN3AH9r"
+    BTC = "bc1qqxzu6vvzy55x2n48wpg2drfyu947pfqpcsvjsd"
+
+  # قیمت طرح‌های اشتراک (به واحد ارز مربوطه)
+  [PaymentScanner.Plans]
+    Basic = 0.05
+    Pro = 0.20
+    Enterprise = 0.50
