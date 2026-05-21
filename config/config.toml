@@ -1,62 +1,51 @@
 # ================================================
-# فایل تنظیمات اصلی اکسپلورر بیکن‌چین
-# این فایل باید در مسیر config/config.toml قرار گیرد
+# Main Configuration File for Beaconchain Explorer
 # ================================================
 
-# --- تنظیمات پایگاه داده ---
 [Database]
-  Host = "localhost"          # آدرس سرور دیتابیس (در docker: "postgres")
+  Host = "localhost"
   Port = 5432
   User = "postgres"
-  Password = "your_password"  # رمز عبور دیتابیس خود را وارد کنید
-  Name = "beaconchain"        # نام دیتابیس
+  Password = "your_password"   # رمز واقعی PostgreSQL خود را اینجا بزنید
+  Name = "beaconchain"
 
-# --- نود لایه اجماع (Consensus Layer) ---
 [BeaconNode]
-  # آدرس نود Lighthouse، Prysm یا سایر کلاینت‌های لایه اجماع
   Host = "http://localhost:3500"
 
-# --- نود لایه اجرا (Execution Layer) ---
 [ExecutionNode]
-  # آدرس نود Geth، Nethermind یا سایر کلاینت‌های لایه اجرا
   Host = "http://localhost:8545"
 
 [Eth1]
   Host = "http://localhost:8545"
 
-# --- تنظیمات رابط کاربری ---
 [Frontend]
   SiteDomain = "localhost:8080"
-  Secure = false              # برای localhost false باشد، در تولید true
-  Debug = true                # در تولید false شود
+  Secure = false
+  Debug = true
 
-# --- کش (Redis) ---
 [Redis]
-  Host = "localhost"          # در docker از "redis" استفاده کنید
+  Host = "localhost"
   Port = 6379
   Password = ""
 
-# ================================================
-# 🌟 اسکنر خودکار پرداخت (ویژگی اصلی)
-# ================================================
 [PaymentScanner]
-  Enabled = true               # فعال‌سازی اسکنر
-  ScanIntervalSeconds = 600    # هر 10 دقیقه یک بار اسکن کند
+  Enabled = true
+  ScanIntervalSeconds = 600
 
-  # کلیدهای API (برای خواندن تراکنش‌ها از بلاک‌چین) - در صورت عدم وجود، اسکنر کار نمی‌کند
-  EtherscanAPIKey = "YOUR_ETHERSCAN_API_KEY"     # از etherscan.io دریافت کنید
-  BscscanAPIKey = "YOUR_BSCSCAN_API_KEY"         # از bscscan.com
-  SolanaRPCURL = "https://api.mainnet-beta.solana.com"  # می‌تواند عمومی باشد
-  BlockstreamAPIKey = ""                          # اختیاری برای بیت‌کوین
+  # کلید API (از سرویس DRPC یا Etherscan)
+  EtherscanAPIKey = "An5-cbuBTEl7u0A2rB7FKStFBe9itowR75yRuivZK8k9"
+  BscscanAPIKey = "An5-cbuBTEl7u0A2rB7FKStFBe9itowR75yRuivZK8k9"
+  SolanaRPCURL = "https://api.mainnet-beta.solana.com"
+  BlockstreamAPIKey = ""
 
-  # آدرس کیف پول‌هایی که اسکنر باید آن‌ها را رصد کند
+  # آدرس کیف پول‌های شما (عمومی)
   [PaymentScanner.Wallets]
     ETH = "0x4E94F10F0a34a0DF229e68d5902644046258D678"
     BNB = "0x4E94F10F0a34a0DF229e68d5902644046258D678"
     SOL = "D5WGQzdd6NrAWKfcSCL29DT238SVPkobKrm6VTN3AH9r"
     BTC = "bc1qqxzu6vvzy55x2n48wpg2drfyu947pfqpcsvjsd"
 
-  # قیمت طرح‌های اشتراک (به واحد ارز مربوطه)
+  # قیمت طرح‌ها
   [PaymentScanner.Plans]
     Basic = 0.05
     Pro = 0.20
