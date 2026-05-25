@@ -1,9 +1,6 @@
-version: 2
-updates:
-  - package-ecosystem: "gomod"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-    commit-message:
-      prefix: "chore"
-    open-pull-requests-limit: 10
+chore(deps): configure Dependabot for weekly gomod updates
+
+- Set package ecosystem to "gomod" for Go module dependencies
+- Schedule weekly dependency scans to keep dependencies fresh
+- Use "chore" prefix for automated PR commit messages
+- Limit concurrent open pull requests to 10 to reduce noise
