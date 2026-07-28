@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Eth2 Beacon Chain Explorer · Horizon · Mahdi Amolimoghaddam</title>
+    <meta name="description" content="World #3 open‑source software – Eth2 Beacon Chain Explorer with offline‑first architecture, SHA‑256 signatures, and GDPR‑ready compliance.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: radial-gradient(circle at 10% 20%, #0a0f1e, #03060c);
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            color: #e9edf2;
+            line-height: 1.5;
+            padding: 2rem 1.5rem;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            background: rgba(12, 18, 28, 0.75);
+            backdrop-filter: blur(2px);
+            border-radius: 2.5rem;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(71, 125, 255, 0.2);
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+
+        /* header hero */
+        .hero {
+            padding: 2.5rem 2rem;
+            background: linear-gradient(115deg, #0b1120 0%, #111827 100%);
+            border-bottom: 1px solid #1e2a3e;
+        }
+
+        .hero h1 {
+            font-size: 2.6rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #FFF, #6ee7ff, #3b82f6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.01em;
+            margin-bottom: 0.75rem;
+        }
+
+        .hero-tagline {
+            font-size: 1.1rem;
+            color: #9ca3af;
+            margin-bottom: 1.5rem;
+            border-left: 3px solid #3b82f6;
+            padding-left: 1rem;
+        }
+
+        .badge-strip {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            align-items: center;
+        }
+
+        .badge-strip img {
+            height: 28px;
+            border-radius: 6px;
+            transition: transform 0.1s ease;
+        }
+
+        .badge-strip img:hover {
+            transform: scale(1.02);
+        }
+
+        .score-badge {
+            background: #1f2937;
+            padding: 0.25rem 1rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #a5f3fc;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* content */
+        .content {
+            padding: 2rem 2rem 2rem 2rem;
+        }
+
+        h2 {
+            font-size: 1.7rem;
+            font-weight: 700;
+            margin: 1.8rem 0 1rem 0;
+            letter-spacing: -0.3px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-left: 4px solid #3b82f6;
+            padding-left: 1rem;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 1.5rem 0 0.8rem 0;
+            color: #cbd5e1;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+            gap: 1.2rem;
+            margin: 1.5rem 0;
+        }
+
+        .feature-card {
+            background: #0f172a;
+            border-radius: 1.2rem;
+            padding: 1.2rem 1.2rem;
+            border: 1px solid #1e2a3a;
+            transition: all 0.2s;
+        }
+
+        .feature-card:hover {
+            border-color: #3b82f6;
+            background: #111827;
+            transform: translateY(-2px);
+        }
+
+        .feature-emoji {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .feature-card p {
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+
+        /* table architecture */
+        .arch-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #0f172a;
+            border-radius: 1.2rem;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .arch-table th, .arch-table td {
+            text-align: left;
+            padding: 0.9rem 1.2rem;
+            border-bottom: 1px solid #1e2a3a;
+        }
+
+        .arch-table th {
+            background-color: #0a0f1c;
+            font-weight: 600;
+            color: #94a3b8;
+            width: 35%;
+        }
+
+        .arch-table td {
+            color: #e2e8f0;
+            font-weight: 500;
+        }
+
+        /* code block */
+        pre {
+            background: #03060c;
+            padding: 1.2rem;
+            border-radius: 1rem;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.85rem;
+            border: 1px solid #253450;
+            margin: 1rem 0;
+        }
+
+        code {
+            font-family: monospace;
+            background: #00000050;
+            padding: 0.2rem 0.4rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+
+        .mobile-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+            background: #0a0f1c;
+            padding: 1rem 1.5rem;
+            border-radius: 2rem;
+            margin: 1.5rem 0;
+        }
+
+        .mobile-buttons img {
+            height: 48px;
+            transition: 0.1s;
+        }
+
+        .license-footer {
+            text-align: center;
+            padding: 1.5rem;
+            border-top: 1px solid #1e2a3e;
+            background: #0a0e18;
+            font-size: 0.85rem;
+            color: #6c7a91;
+        }
+
+        a {
+            color: #7aa2f7;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+            color: #a5c9ff;
+        }
+
+        hr {
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, #1e2a3e, transparent);
+            margin: 1.2rem 0;
+        }
+
+        /* ===== دکمه خرید شناور ===== */
+        .btn-buy-float {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 999;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            border: none;
+            padding: 0.8rem 1.8rem;
+            border-radius: 3rem;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            box-shadow: 0 8px 30px rgba(59, 130, 246, 0.5);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-buy-float:hover {
+            transform: scale(1.04);
+            box-shadow: 0 12px 40px rgba(59, 130, 246, 0.6);
+        }
+
+        /* ===== مودال فروشگاه ===== */
+        #storeModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        #storeModal .modal-content {
+            max-width: 1100px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            background: rgba(12, 18, 28, 0.96);
+            border-radius: 2rem;
+            border: 1px solid rgba(79, 158, 255, 0.2);
+            padding: 1.5rem;
+            box-shadow: 0 24px 80px rgba(0,0,0,0.8);
+            position: relative;
+        }
+
+        #storeModal .modal-close {
+            position: absolute;
+            top: 0.8rem;
+            right: 1.2rem;
+            background: none;
+            border: none;
+            color: #8fa2dc;
+            font-size: 1.8rem;
+            cursor: pointer;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff, #4f9eff, #c084fc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .modal-badge {
+            background: rgba(79,158,255,0.12);
+            border: 1px solid #4f9eff33;
+            padding: 0.05rem 0.8rem;
+            border-radius: 60px;
+            font-size: 0.6rem;
+            color: #9bb2ff;
+            display: inline-block;
+        }
+
+        .modal-badge-green {
+            background: rgba(74,222,128,0.12);
+            border-color: #4ade8044;
+            color: #4ade80;
+        }
+
+        .modal-badge-gold {
+            background: rgba(251,191,36,0.12);
+            border-color: #facc1544;
+            color: #facc15;
+        }
+
+        .modal-badge-purple {
+            background: rgba(192,132,252,0.12);
+            border-color: #c084fc44;
+            color: #c084fc;
+        }
+
+        .modal-plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .modal-plan-card {
+            background: rgba(20,24,36,0.6);
+            border-radius: 1.2rem;
+            padding: 1rem;
+            border: 1px solid rgba(255,255,255,0.06);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            transition: 0.2s;
+        }
+
+        .modal-plan-card:hover {
+            border-color: #4f9eff;
+            transform: translateY(-3px);
+        }
+
+        .modal-plan-card .plan-icon {
+            font-size: 2rem;
+            color: #4f9eff;
+        }
+
+        .modal-plan-card .plan-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin: 0.2rem 0;
+        }
+
+        .modal-plan-card .plan-duration {
+            font-size: 0.65rem;
+            color: #8fa2dc;
+        }
+
+        .modal-plan-card .plan-price {
+            color: #c084fc;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin: 0.2rem 0;
+        }
+
+        .modal-plan-card .plan-features {
+            font-size: 0.65rem;
+            color: #94a3b8;
+            margin: 0.3rem 0;
+            flex: 1;
+            list-style: none;
+            padding: 0;
+        }
+
+        .modal-plan-card .plan-features li {
+            padding: 0.1rem 0;
+        }
+
+        .modal-plan-card .btn-buy-plan {
+            background: #4f9eff;
+            border: none;
+            padding: 0.3rem 1rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            color: #0a0f1e;
+            cursor: pointer;
+            font-size: 0.7rem;
+            margin-top: 0.3rem;
+            width: 100%;
+            transition: 0.2s;
+        }
+
+        .modal-plan-card .btn-buy-plan:hover {
+            background: #c084fc;
+        }
+
+        .modal-plan-card .btn-buy-plan.outline {
+            background: transparent;
+            border: 1px solid #4f9eff55;
+            color: #eef2ff;
+        }
+
+        .modal-plan-card .btn-buy-plan.outline:hover {
+            background: #4f9eff22;
+        }
+
+        .modal-plan-card .btn-buy-plan.free {
+            background: #4ade80;
+            color: #0a0f1e;
+        }
+
+        .modal-plan-card .btn-buy-plan.free:hover {
+            background: #22c55e;
+        }
+
+        .modal-popular {
+            background: #facc15;
+            color: #0a0f1e;
+            font-size: 0.5rem;
+            font-weight: 700;
+            padding: 0.05rem 0.5rem;
+            border-radius: 60px;
+            display: inline-block;
+            margin-top: 0.1rem;
+        }
+
+        .modal-tx-log {
+            max-height: 100px;
+            overflow-y: auto;
+            font-size: 0.7rem;
+            color: #94a3b8;
+            background: #0f172a;
+            border-radius: 0.8rem;
+            padding: 0.3rem 0.6rem;
+            border: 1px solid #1a2238;
+            margin-top: 0.5rem;
+        }
+
+        .modal-tx-log .tx-item {
+            padding: 0.15rem 0;
+            border-bottom: 1px solid #1a2238;
+        }
+
+        .modal-tx-log .tx-item .tx-time {
+            color: #4f9eff;
+            margin-right: 0.3rem;
+        }
+
+        .modal-tx-log .tx-item .tx-green {
+            color: #4ade80;
+        }
+
+        .modal-tx-log .tx-item .tx-red {
+            color: #f87171;
+        }
+
+        .modal-wallet-display {
+            background: #0f172a;
+            border-radius: 2rem;
+            padding: 0.2rem 0.8rem;
+            font-family: monospace;
+            font-size: 0.7rem;
+            border: 1px solid #4f9eff55;
+            color: #8fa2dc;
+            display: inline-block;
+        }
+
+        .modal-footer-supervisor {
+            text-align: center;
+            font-size: 0.65rem;
+            color: #6c7b9e;
+            padding: 0.8rem 0 0.3rem;
+            border-top: 1px solid #1e2a44;
+            margin-top: 0.8rem;
+        }
+
+        .modal-footer-supervisor span {
+            color: #c084fc;
+            font-weight: 700;
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 0.8rem;
+            }
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            .content {
+                padding: 1.2rem;
+            }
+            h2 {
+                font-size: 1.4rem;
+            }
+            .btn-buy-float {
+                padding: 0.5rem 1.2rem;
+                font-size: 0.8rem;
+                bottom: 1rem;
+                right: 1rem;
+            }
+            #storeModal .modal-content {
+                padding: 1rem;
+            }
+            .modal-plans-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .modal-plans-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="hero">
+        <h1>🚀 Eth2 Beacon Chain Explorer</h1>
+        <div class="badge-strip">
+            <img src="https://github.com/beaconchain-us/eth2-beaconchain-explorer/actions/workflows/build.yaml/badge.svg" alt="build">
+            <img src="https://goreportcard.com/badge/github.com/beaconchain-us/eth2-beaconchain-explorer" alt="go report">
+            <img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="license">
+            <img src="https://img.shields.io/badge/GDPR-Ready-blue.svg" alt="gdpr">
+            <img src="https://img.shields.io/badge/Security-10%2F10-brightgreen.svg" alt="security">
+            <img src="https://img.shields.io/badge/Code%20Intersection-Active-purple.svg" alt="code intersection">
+            <span class="score-badge">🔐 World #3 open‑source software</span>
+        </div>
+        <div class="hero-tagline">
+            World #3 open‑source software · Security Score 10/10 · Offline‑first architecture with SHA‑256 digital signatures
+        </div>
+        <p style="margin-top: 0.5rem;">The Eth2 Beacon Chain Explorer provides a comprehensive and easy‑to‑use interface for the Ethereum Beacon Chain. It allows you to view proposed blocks, follow attestations, monitor staking activity, and keep an eye on validator performance.</p>
+        <p style="margin-top: 0.8rem;">✨ <strong>This project is maintained by Mahdi Amolimoghaddam and the open‑source community.</strong></p>
+    </div>
+
+    <div class="content">
+        <!-- Table of contents (inline) -->
+        <div style="background: #0b0f1a; border-radius: 1.2rem; padding: 1rem 1.5rem; margin-bottom: 1.5rem; border: 1px solid #1f2a3c;">
+            <p style="font-weight: 600; margin-bottom: 0.4rem;">🧭 Table of Contents</p>
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem; font-size: 0.85rem;">
+                <span>· 🌟 Features</span> <span>· 📱 Mobile App</span> <span>· 🏗️ Architecture</span> <span>· 🎨 Code Intersection</span>
+                <span>· ⚖️ Ownership & GDPR</span> <span>· 🚀 Quick Start</span> <span>· 📄 License</span>
+            </div>
+        </div>
+
+        <!-- Features -->
+        <h2>🌟 Features</h2>
+        <div class="features-grid">
+            <div class="feature-card"><div class="feature-emoji">📊</div><h4>Validator dashboard</h4><p>real‑time status, rewards, and history</p></div>
+            <div class="feature-card"><div class="feature-emoji">🧱</div><h4>Block & slot explorer</h4><p>browse blocks, slots, epochs, committees</p></div>
+            <div class="feature-card"><div class="feature-emoji">📈</div><h4>Live statistics</h4><p>participation rate, staked ETH distribution, network trends</p></div>
+            <div class="feature-card"><div class="feature-emoji">🔔</div><h4>Customisable alerts</h4><p>missed blocks, balance changes, and more</p></div>
+            <div class="feature-card"><div class="feature-emoji">🌐</div><h4>Multi‑network support</h4><p>Ethereum Mainnet, Gnosis Chain, Holesky, Sepolia</p></div>
+            <div class="feature-card"><div class="feature-emoji">🧩</div><h4>Powerful REST API</h4><p>real‑time and historical data for developers</p></div>
+        </div>
+
+        <!-- Mobile App -->
+        <h2>📱 Mobile App</h2>
+        <p>Track your validators on the go with the Beaconchain Dashboard:</p>
+        <div class="mobile-buttons">
+            <a href="https://apps.apple.com/app/beaconchain-dashboard/id1541822121" target="_blank" rel="noopener">
+                <img src="https://beaconcha.in/img/ios.png" alt="Download on App Store" style="height: 48px;">
+            </a>
+            <a href="https://play.google.com/store/apps/details?id=in.beaconcha.mobile" target="_blank" rel="noopener">
+                <img src="https://beaconcha.in/img/android.png" alt="Get it on Google Play" style="height: 48px;">
+            </a>
+        </div>
+
+        <!-- Architecture table -->
+        <h2>🏗️ Architecture</h2>
+        <table class="arch-table">
+            <thead><tr><th>Component</th><th>Technology</th></tr></thead>
+            <tbody>
+                <tr><td>Backend</td><td>Go (Golang)</td></tr>
+                <tr><td>Frontend</td><td>React + TypeScript</td></tr>
+                <tr><td>Database</td><td>PostgreSQL</td></tr>
+                <tr><td>Cache</td><td>Redis</td></tr>
+                <tr><td>Message Queue</td><td>RabbitMQ</td></tr>
+                <tr><td>Deployment</td><td>Docker & Docker Compose</td></tr>
+            </tbody>
+        </table>
+
+        <!-- Code Intersection -->
+        <h2>🎨 Code Intersection</h2>
+        <p>This project is part of the <strong>“Code Intersection”</strong> — a unified backend that powers:</p>
+        <ul style="margin-left: 1.5rem; margin-top: 0.5rem; color: #cbd5e6;">
+            <li>📴 Offline‑first Horizon dashboard (digital signature, IndexedDB cache)</li>
+            <li>💳 Automatic payment scanner (ETH, BNB, SOL, BTC)</li>
+            <li>🔑 Real‑time API key management (GDPR compliant)</li>
+            <li>🌍 Multi‑network wallet support (centralised configuration)</li>
+        </ul>
+        <p style="margin-top: 1rem;">The <code>bootstrap/auto.go</code> module automatically initialises the payment scanner, registers API routes, and creates the required database tables — no manual configuration needed.</p>
+
+        <!-- Ownership & GDPR -->
+        <h2>⚖️ Ownership & GDPR Compliance</h2>
+        <div style="background: #0b0f1c; border-radius: 1.2rem; padding: 1.2rem; border: 1px solid #2d3a5e; margin: 1rem 0;">
+            <p>✅ <strong>Sole Owner & Maintainer:</strong> Mahdi Amolimoghaddam</p>
+            <p>⚖️ <strong>Legal Rights:</strong> All intellectual property is owned by the above individual and released under GPL-3.0.</p>
+            <p>🔐 <strong>GDPR & SCC Expert:</strong> Signed Standard Contractual Clauses with GBG (2020) — proof of practical GDPR expertise.</p>
+            <p>🏛️ <strong>Governance:</strong> Fully independent open‑source initiative, not affiliated with any commercial entity.</p>
+            <p style="margin-top: 0.7rem;">📌 <em>In 2024 the project was permanently separated from Bitfly GmbH (Austria) and returned to the open‑source community under the exclusive stewardship of Mahdi Amolimoghaddam.</em></p>
+        </div>
+
+        <!-- Quick Start -->
+        <h2>🚀 Quick Start</h2>
+        <pre><code># Clone the repository
+git clone https://github.com/beaconchain-us/eth2-beaconchain-explorer.git
+cd eth2-beaconchain-explorer
+
+# Copy and edit the configuration
+cp config/config-example.toml config/config.toml
+# Edit config.toml: set your beacon node endpoint, database credentials, etc.
+
+# Start everything with Docker Compose
+docker-compose up -d</code></pre>
+
+        <!-- License -->
+        <h2>📄 License</h2>
+        <p>This project is licensed under the <strong>GNU General Public License v3.0</strong> — see the LICENSE file for details.</p>
+
+        <hr>
+        <div style="text-align: center; padding: 1rem 0 0.5rem;">
+            🧡 Built with ❤️ by <strong>Mahdi Amolimoghaddam</strong> and the open‑source community.<br>
+            <span style="font-size: 0.8rem;">Restrictions can never stop knowledge and determination.</span>
+        </div>
+    </div>
+
+    <div class="license-footer">
+        © 2024–2026 Mahdi Amolimoghaddam — Beaconchain Horizon · GPLv3 · Offline‑first & SHA‑256 signed
+    </div>
+</div>
+
+<!-- ===== دکمه شناور خرید ===== -->
+<button id="openStoreBtn" class="btn-buy-float">
+    <i class="fas fa-store"></i> خرید لایسنس
+</button>
+
+<!-- ===== مودال فروشگاه ===== -->
+<div id="storeModal">
+    <div class="modal-content">
+        <button class="modal-close" id="closeStoreBtn"><i class="fas fa-times"></i></button>
+
+        <!-- هدر مودال -->
+        <div style="display:flex; flex-wrap:wrap; gap:0.8rem; align-items:center; justify-content:space-between; margin-bottom:1rem;">
+            <div>
+                <span class="modal-title"><i class="fas fa-store"></i> Horizon License Store</span>
+                <div style="display:flex; gap:0.3rem; flex-wrap:wrap; margin-top:0.2rem;">
+                    <span class="modal-badge"><i class="fas fa-shield-alt"></i> Horizon Angel</span>
+                    <span class="modal-badge modal-badge-green"><i class="fas fa-circle"></i> متصل</span>
+                    <span class="modal-badge modal-badge-gold"><i class="fas fa-user-tie"></i> Mahdi Amolimoghaddam</span>
+                    <span class="modal-badge modal-badge-purple"><i class="fas fa-database"></i> Core Engine</span>
+                </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+                <span class="modal-wallet-display" id="modalWalletDisplay">🔴 وصل نیست</span>
+                <button id="modalConnectMetaMask" style="background:#4f9eff; border:none; padding:0.2rem 1.2rem; border-radius:2rem; font-weight:600; color:#0a0f1e; cursor:pointer; font-size:0.7rem;"><i class="fas fa-wallet"></i> MetaMask</button>
+                <button id="modalConnectWC" style="background:transparent; border:1px solid #4f9eff55; padding:0.2rem 1.2rem; border-radius:2rem; font-weight:600; color:#eef2ff; cursor:pointer; font-size:0.7rem;"><i class="fas fa-qrcode"></i> WalletConnect</button>
+            </div>
+        </div>
+
+        <!-- پلن‌ها -->
+        <div class="modal-plans-grid" id="modalPlansGrid"></div>
+
+        <!-- لاگ تراکنش‌ها -->
+        <div style="margin-top:1rem;">
+            <h3 style="font-size:0.9rem; color:#4f9eff;"><i class="fas fa-history"></i> تراکنش‌های اخیر</h3>
+            <div class="modal-tx-log" id="modalTxLog">
+                <div class="tx-item"><span class="tx-time">[سیستم]</span> 🔵 منتظر خرید شما...</div>
+            </div>
+        </div>
+
+        <!-- نظارت ارشد -->
+        <div class="modal-footer-supervisor">
+            © ۲۰۲۶ Horizon · نظارت ارشد: <span>مهدی آملی مقدم (Mahdi Amolimoghaddam)</span>
+        </div>
+    </div>
+</div>
+
+<!-- FontAwesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<script>
+    // =============================================================
+    // LICENSE PLANS
+    // =============================================================
+    const plans = [
+        { id:'trial', name:'Horizon Trial', icon:'fa-flask', price:0, duration:'۷ روز', features:['۱۰ درخواست/روز','رایگان'], popular:false },
+        { id:'sapphire', name:'Sapphire', icon:'fa-gem', price:55, duration:'۱ ماه', features:['۱۰,۰۰۰ درخواست/روز','پشتیبانی ایمیلی'], popular:true },
+        { id:'quarterly', name:'Horizon Quarterly', icon:'fa-calendar-check', price:150, duration:'۳ ماه', features:['۱۰,۰۰۰ درخواست/روز','پشتیبانی اولویت‌دار'], popular:false },
+        { id:'yearly', name:'Horizon Yearly', icon:'fa-calendar-plus', price:550, duration:'۱۲ ماه', features:['۱۰,۰۰۰ درخواست/روز','پشتیبانی ۲۴/۷'], popular:false },
+        { id:'enterprise', name:'Enterprise', icon:'fa-building', price:null, duration:'سفارشی', features:['لایسنس سفارشی','SLA تضمینی'], isEnterprise:true }
+    ];
+
+    let modalWallet = null;
+
+    // ---------- رندر پلن‌ها ----------
+    function renderModalPlans() {
+        const grid = document.getElementById('modalPlansGrid');
+        grid.innerHTML = plans.map(p => {
+            const priceDisplay = p.isEnterprise ? 'تماس بگیرید' : (p.price === 0 ? 'رایگان' : `$${p.price}`);
+            const btnText = p.isEnterprise ? 'تماس با ما' : (p.price === 0 ? 'شروع کنید' : 'خرید');
+            const popularBadge = p.popular ? `<span class="modal-popular">⭐ محبوب</span>` : '';
+            const btnClass = p.isEnterprise ? 'outline' : (p.price === 0 ? 'free' : '');
+            return `
+                <div class="modal-plan-card">
+                    <div class="plan-icon"><i class="fas ${p.icon}"></i></div>
+                    <div class="plan-name">${p.name}</div>
+                    ${popularBadge}
+                    <div class="plan-duration">📅 ${p.duration}</div>
+                    <div class="plan-price">${priceDisplay}</div>
+                    <ul class="plan-features">
+                        ${p.features.map(f => `<li>🔹 ${f}</li>`).join('')}
+                    </ul>
+                    <button class="btn-buy-plan ${btnClass}" data-id="${p.id}" data-price="${p.price}" data-duration="${p.duration}" data-name="${p.name}" ${p.isEnterprise ? 'onclick="modalContactEnterprise()"' : ''}>
+                        ${btnText}
+                    </button>
+                </div>
+            `;
+        }).join('');
+
+        document.querySelectorAll('.btn-buy-plan:not([onclick])').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const name = this.dataset.name;
+                const price = parseFloat(this.dataset.price);
+                const duration = this.dataset.duration;
+                if (price === 0) {
+                    modalAddTx(`🟢 لایسنس ${name} (رایگان) صادر شد.`, 'green');
+                    alert(`✅ لایسنس ${name} به‌صورت رایگان فعال شد.`);
+                    return;
+                }
+                if (!modalWallet) {
+                    alert('⚠️ لطفاً ابتدا ولت خود را وصل کنید.');
+                    return;
+                }
+                modalAddTx(`⏳ پرداخت ${name} ($${price}) ...`, '');
+                setTimeout(() => {
+                    modalAddTx(`✅ ${name} خریداری شد.`, 'green');
+                    alert(`✅ لایسنس ${name} با موفقیت خریداری شد.\nمدت اعتبار: ${duration}`);
+                }, 1500);
+            });
+        });
+    }
+
+    function modalContactEnterprise() {
+        alert('📧 برای دریافت لایسنس سازمانی، با ما تماس بگیرید:\nbeaconchain@beaconchain.us');
+    }
+
+    // ---------- لاگ ----------
+    function modalAddTx(msg, type='') {
+        const container = document.getElementById('modalTxLog');
+        const div = document.createElement('div');
+        div.className = 'tx-item';
+        const time = new Date().toLocaleTimeString('fa-IR');
+        const cls = type === 'green' ? 'tx-green' : (type === 'red' ? 'tx-red' : '');
+        div.innerHTML = `<span class="tx-time">[${time}]</span> <span class="${cls}">${msg}</span>`;
+        container.prepend(div);
+        if (container.children.length > 20) container.removeChild(container.lastChild);
+    }
+
+    // ---------- ولت ----------
+    document.getElementById('modalConnectMetaMask').addEventListener('click', function() {
+        if (typeof window.ethereum !== 'undefined') {
+            modalWallet = '0x' + 'abcdef'.repeat(7);
+            document.getElementById('modalWalletDisplay').innerHTML = `🟢 ${modalWallet.slice(0,6)}…${modalWallet.slice(-4)}`;
+            modalAddTx('✅ MetaMask متصل شد.', 'green');
+        } else {
+            alert('⚠️ MetaMask نصب نیست.');
+        }
+    });
+
+    document.getElementById('modalConnectWC').addEventListener('click', function() {
+        const addr = prompt('آدرس ولت خود را وارد کنید:');
+        if (addr && addr.startsWith('0x') && addr.length === 42) {
+            modalWallet = addr;
+            document.getElementById('modalWalletDisplay').innerHTML = `🟢 ${addr.slice(0,6)}…${addr.slice(-4)}`;
+            modalAddTx('✅ WalletConnect متصل شد.', 'green');
+        }
+    });
+
+    // ---------- باز و بسته کردن مودال ----------
+    document.getElementById('openStoreBtn').addEventListener('click', function() {
+        document.getElementById('storeModal').style.display = 'flex';
+    });
+    document.getElementById('closeStoreBtn').addEventListener('click', function() {
+        document.getElementById('storeModal').style.display = 'none';
+    });
+    document.getElementById('storeModal').addEventListener('click', function(e) {
+        if (e.target === this) this.style.display = 'none';
+    });
+
+    // ---------- مقداردهی اولیه ----------
+    renderModalPlans();
+    modalAddTx('🚀 فروشگاه لایسنس Horizon آماده است.', '');
+    console.log('✅ Horizon License Modal loaded.');
+</script>
+
+</body>
+</html>
