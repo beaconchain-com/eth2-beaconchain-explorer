@@ -2,17 +2,16 @@
   <img src="https://github.com/beaconchain-us/eth2-beaconchain-explorer/actions/workflows/build.yaml/badge.svg" alt="Build">
   <img src="https://goreportcard.com/badge/github.com/beaconchain-us/eth2-beaconchain-explorer" alt="Go Report Card">
   <img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="License">
-  <img src="https://img.shields.io/badge/GDPR-Ready-blue.svg" alt="GDPR">
-  <img src="https://img.shields.io/badge/Security-10%2F10-brightgreen.svg" alt="Security">
-  <img src="https://img.shields.io/badge/Code%20Intersection-Active-purple.svg" alt="Code Intersection">
+  <img src="https://img.shields.io/badge/Privacy-Focused-blue.svg" alt="Privacy">
+  <img src="https://img.shields.io/badge/Open%20Source-Community%20Driven-purple.svg" alt="Community">
 </p>
 
 <h1 align="center">🏛️ Eth2 Beacon Chain Explorer · Horizon</h1>
-<h3 align="center">World #3 open‑source software · Security Score 10/10 · Offline‑first architecture with SHA‑256 digital signatures</h3>
+<h3 align="center">Open‑source blockchain explorer with offline‑first architecture and SHA‑256 digital signatures</h3>
 
 <p align="center">
   <strong>🌐 Explore · Monitor · Validate</strong><br>
-  The most advanced open‑source interface for the Ethereum Consensus Layer.
+  An advanced open‑source interface for the Ethereum Consensus Layer.
 </p>
 
 <p align="center">
@@ -26,7 +25,7 @@
 2. [📱 Mobile App](#-mobile-app)
 3. [🏗️ Architecture](#️-architecture)
 4. [🎨 Code Intersection](#-code-intersection)
-5. [⚖️ Ownership & GDPR Compliance](#️-ownership--gdpr-compliance)
+5. [⚖️ Ownership & Privacy Compliance](#️-ownership--privacy-compliance)
 6. [🚀 Quick Start](#-quick-start)
 7. [📄 License](#-license)
 
@@ -81,23 +80,23 @@ This project is part of the **“Code Intersection”** — a unified backend th
 
 - 🔏 **Offline‑first Horizon dashboard** (digital signature, IndexedDB cache)
 - 💳 **Automatic payment scanner** (ETH, BNB, SOL, BTC)
-- 🔑 **Real‑time API key management** (GDPR compliant)
+- 🔑 **Real‑time API key management** (privacy‑focused)
 - 🌍 **Multi‑network wallet support** (centralised configuration)
 
 The `bootstrap/auto.go` module automatically initialises the payment scanner, registers API routes, and creates the required database tables — **no manual configuration needed**.
 
 ---
 
-## ⚖️ Ownership & GDPR Compliance
+## ⚖️ Ownership & Privacy Compliance
 
 | Aspect | Statement |
 | :--- | :--- |
-| ✅ **Sole Owner & Maintainer** | **Mahdi Amolimoghaddam** |
-| ⚖️ **Legal Rights** | All intellectual property owned by the above individual, released under **GPL‑3.0** |
-| 🔐 **GDPR & SCC Expert** | Signed **Standard Contractual Clauses with GBG (2020)** — practical GDPR expertise |
-| 🏛️ **Governance** | Fully independent open‑source initiative, **not affiliated with any commercial entity** |
+| ✅ **Owner & Maintainer** | **Mahdi Amolimoghaddam** |
+| ⚖️ **License** | Released under **GPL‑3.0** |
+| 🔐 **Privacy‑first approach** | Designed with privacy and data minimisation in mind, avoiding unnecessary data collection |
+| 🏛️ **Governance** | Independent open‑source initiative, not affiliated with any commercial entity |
 
-> 📌 **In 2024 the project was permanently separated from Bitfly GmbH (Austria) and returned to the open‑source community under the exclusive stewardship of Mahdi Amolimoghaddam.**
+> 📌 This project is a community‑driven continuation of the original beaconcha.in explorer, released as an independent open‑source effort.
 
 ---
 
